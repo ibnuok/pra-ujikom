@@ -4,14 +4,9 @@
 @section('content')
 
 <div class="max-w-6xl mx-auto">
-    <!-- Header Card -->
-    <div class="bg-gradient-to-r from-blue-950/40 to-indigo-950/40 backdrop-blur-sm border border-indigo-500/30 rounded-xl p-8 mb-8 shadow-lg">
-        <h1 class="text-3xl font-bold text-indigo-300 mb-2">Dashboard User</h1>
-        <p class="text-indigo-200">Kelola peminjaman laptop Anda dengan mudah</p>
-    </div>
 
     <!-- Main Grid -->
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
         
         <!-- Card: Lihat Daftar Alat -->
         <a href="{{ route('user.alats') }}" class="group bg-gradient-to-br from-indigo-600/40 to-indigo-800/40 backdrop-blur-sm border border-indigo-500/50 p-8 rounded-xl hover:shadow-xl hover:scale-105 transition">
@@ -40,7 +35,7 @@
     </div>
 
     <!-- Info Section -->
-    <div class="bg-gradient-to-r from-blue-950/40 to-purple-950/40 backdrop-blur-sm border border-indigo-500/30 rounded-xl p-8 mt-8 shadow-lg">
+    <div class="bg-gradient-to-r from-blue-950/40 to-purple-950/40 backdrop-blur-sm border border-indigo-500/30 rounded-xl p-8 shadow-lg mt-8">
         <h3 class="text-xl font-bold text-indigo-300 mb-4">ℹ️ Alur Peminjaman</h3>
         <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-indigo-200">
             <div class="bg-white/5 backdrop-blur-sm border border-white/10 rounded-lg p-4">
@@ -63,22 +58,3 @@
 </div>
 
 @endsection
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Dashboard User</title>
-</head>
-<body>
-    <h1>Dashboard User</h1>
-    <p>Selamat datang, User!</p>
-
-    <a href="{{ route('logout') }}"
-       onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-        Logout
-    </a>
-
-    <form id="logout-form" action="{{ route('logout') }}" method="POST">
-        @csrf
-    </form>
-</body>
-</html>

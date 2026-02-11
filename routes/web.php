@@ -16,6 +16,7 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
     Route::resource('alat', AlatController::class);
     Route::resource('kategori', KategoriController::class);
     Route::resource('peminjaman', PeminjamanController::class);
+
 });
 
 Route::middleware(['auth'])->group(function () {

@@ -34,13 +34,21 @@ class UserPeminjamanController extends Controller
     {
         $request->validate([
             'alat_id' => 'required|exists:alats,id',
+            'jumlah' => 'required|integer|min:1',
             'tanggal_pinjam' => 'required|date',
             'tanggal_kembali' => 'required|date|after_or_equal:tanggal_pinjam',
         ]);
 
+        // Cek stok alat
+        $alat = Alat::findOrFail($request->alat_id);
+        if ($request->jumlah > $alat->stok) {
+            return back()->withErrors(['jumlah' => 'Stok alat tidak mencukupi! Stok tersedia: ' . $alat->stok . ' unit.'])->withInput();
+        }
+
         Peminjaman::create([
             'user_id' => auth()->id(),
             'alat_id' => $request->alat_id,
+            'jumlah' => $request->jumlah,
             'tanggal_pinjam' => $request->tanggal_pinjam,
             'tanggal_kembali' => $request->tanggal_kembali,
             'status' => 'pending',
@@ -60,6 +68,9 @@ class UserPeminjamanController extends Controller
             return back()->with('error', 'Alat belum disetujui atau sudah dikembalikan.');
         }
 
+        // Naikkan stok alat sesuai jumlah yang dikembalikan
+        $peminjaman->alat->increment('stok', $peminjaman->jumlah);
+        
         $peminjaman->update(['status' => 'dikembalikan']);
 
         return back()->with('success', 'Alat berhasil dikembalikan. Terima kasih!');

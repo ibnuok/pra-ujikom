@@ -44,10 +44,6 @@
 
         <!-- Tombol -->
         <div class="flex gap-2 pt-4">
-            <a href="{{ route('admin.peminjaman.edit', $peminjaman->id) }}" 
-               class="bg-indigo-600 hover:bg-indigo-700 px-4 py-2 rounded">
-                Edit
-            </a>
             <a href="{{ route('admin.peminjaman.index') }}" 
                class="bg-gray-600 hover:bg-gray-700 px-4 py-2 rounded">
                 Kembali

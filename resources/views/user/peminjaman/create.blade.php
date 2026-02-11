@@ -51,6 +51,14 @@
                 @error('alat_id')<span class="text-red-400 text-sm mt-1 block">{{ $message }}</span>@enderror
             </div>
 
+            <!-- Jumlah Peminjaman -->
+            <div>
+                <label class="block text-sm font-semibold text-indigo-300 mb-2">📦 Jumlah Peminjaman</label>
+                <input type="number" name="jumlah" id="jumlah-input" class="w-full px-4 py-3 rounded-lg bg-white/5 border border-indigo-500/50 text-white focus:border-indigo-400 focus:ring-1 focus:ring-indigo-400 transition" value="{{ old('jumlah', 1) }}" min="1" required>
+                <p class="text-red-400 text-sm mt-1 hidden" id="stok-error">Stok tidak mencukupi!</p>
+                @error('jumlah')<span class="text-red-400 text-sm mt-1 block">{{ $message }}</span>@enderror
+            </div>
+
             <!-- Tanggal Pinjam -->
             <div>
                 <label class="block text-sm font-semibold text-indigo-300 mb-2">📅 Tanggal Pinjam</label>
@@ -92,7 +100,29 @@
 document.addEventListener('DOMContentLoaded', function() {
     const kategoriSelect = document.getElementById('kategori-select');
     const alatSelect = document.getElementById('alat-select');
+    const jumlahInput = document.getElementById('jumlah-input');
     const stokInfo = document.getElementById('stok-info');
+    const stokError = document.getElementById('stok-error');
+    const submitBtn = document.querySelector('button[type="submit"]');
+
+    // Validasi stok
+    function validateStok() {
+        const selectedOption = alatSelect.options[alatSelect.selectedIndex];
+        const stokTersedia = parseInt(selectedOption.getAttribute('data-stok')) || 0;
+        const jumlahPinjam = parseInt(jumlahInput.value) || 0;
+
+        if (jumlahPinjam > stokTersedia && alatSelect.value) {
+            stokError.classList.remove('hidden');
+            submitBtn.disabled = true;
+            submitBtn.classList.add('opacity-50', 'cursor-not-allowed');
+            return false;
+        } else {
+            stokError.classList.add('hidden');
+            submitBtn.disabled = false;
+            submitBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+            return true;
+        }
+    }
 
     // Filter alat berdasarkan kategori yang dipilih
     kategoriSelect.addEventListener('change', function() {
@@ -101,6 +131,8 @@ document.addEventListener('DOMContentLoaded', function() {
         // Reset alat select
         alatSelect.value = '';
         stokInfo.textContent = '';
+        jumlahInput.value = 1;
+        stokError.classList.add('hidden');
 
         // Tampilkan/sembunyikan opsi alat berdasarkan kategori
         const alatOptions = document.querySelectorAll('.alat-option');
@@ -118,13 +150,19 @@ document.addEventListener('DOMContentLoaded', function() {
     // Tampilkan info stok saat alat dipilih
     alatSelect.addEventListener('change', function() {
         const selectedOption = this.options[this.selectedIndex];
+        jumlahInput.value = 1;
         if (this.value) {
             const stok = selectedOption.getAttribute('data-stok');
             stokInfo.textContent = '✓ Stok tersedia: ' + stok + ' unit';
         } else {
             stokInfo.textContent = '';
         }
+        validateStok();
     });
+
+    // Validasi saat jumlah berubah
+    jumlahInput.addEventListener('input', validateStok);
+    jumlahInput.addEventListener('change', validateStok);
 
     // Trigger kategori change untuk initialize tampilan
     if (kategoriSelect.value) {

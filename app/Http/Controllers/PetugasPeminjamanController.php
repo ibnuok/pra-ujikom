@@ -15,6 +15,9 @@ class PetugasPeminjamanController extends Controller
 
     public function approve(Peminjaman $peminjaman)
     {
+        // Kurangi stok alat sesuai jumlah yang dipinjam
+        $peminjaman->alat->decrement('stok', $peminjaman->jumlah);
+        
         $peminjaman->update([
             'status' => 'dipinjam',
             'approved_by' => auth()->id(),

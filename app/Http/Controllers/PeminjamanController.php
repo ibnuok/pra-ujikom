@@ -45,13 +45,18 @@ class PeminjamanController extends Controller
             'status' => 'required|in:dipinjam,dikembalikan',
         ]);
 
-        Peminjaman::create([
+        $peminjaman = Peminjaman::create([
             'user_id' => $request->user_id,
             'alat_id' => $request->alat_id,
             'tanggal_pinjam' => $request->tanggal_pinjam,
             'tanggal_kembali' => $request->tanggal_kembali,
             'status' => $request->status,
         ]);
+
+        // Kurangi stok jika status langsung dipinjam
+        if ($request->status === 'dipinjam') {
+            $peminjaman->alat->decrement('stok');
+        }
 
         return redirect()->route('admin.peminjaman.index')
             ->with('success', 'Data peminjaman berhasil ditambahkan');
@@ -80,6 +85,28 @@ class PeminjamanController extends Controller
             'status' => 'required|in:dipinjam,dikembalikan',
         ]);
 
+        $oldStatus = $peminjaman->status;
+        $oldAlatId = $peminjaman->alat_id;
+        $newStatus = $request->status;
+        $newAlatId = $request->alat_id;
+
+        // Handle perubahan status
+        if ($oldStatus !== 'dipinjam' && $newStatus === 'dipinjam') {
+            // Jika berubah dari non-dipinjam ke dipinjam, kurangi stok alat
+            $peminjaman->alat->decrement('stok');
+        } elseif ($oldStatus === 'dipinjam' && $newStatus !== 'dipinjam') {
+            // Jika berubah dari dipinjam ke non-dipinjam, naikkan stok alat
+            $peminjaman->alat->increment('stok');
+        }
+
+        // Handle perubahan alat pada status dipinjam
+        if ($oldAlatId !== $newAlatId && $oldStatus === 'dipinjam') {
+            // Naikkan stok alat lama
+            Alat::find($oldAlatId)->increment('stok');
+            // Kurangi stok alat baru
+            Alat::find($newAlatId)->decrement('stok');
+        }
+
         $peminjaman->update([
             'user_id' => $request->user_id,
             'alat_id' => $request->alat_id,
@@ -94,6 +121,11 @@ class PeminjamanController extends Controller
 
     public function destroy(Peminjaman $peminjaman)
     {
+        // Kembalikan stok jika peminjaman sedang dipinjam
+        if ($peminjaman->status === 'dipinjam') {
+            $peminjaman->alat->increment('stok');
+        }
+
         $peminjaman->delete();
 
         return redirect()->route('admin.peminjaman.index')

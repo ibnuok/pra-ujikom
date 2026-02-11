@@ -40,7 +40,7 @@
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 010 4m0-4a2 2 0 100 4m0-4a2 2 0 010 4M4 6h16M4 12h16M4 18h16"></path>
                             </svg>
                         </div>
-                        <h3 class="text-xl font-semibold text-white mb-2">Admin Panel</h3>
+                        <h3 class="text-xl font-semibold text-white mb-2">Peminjaman Alat</h3>
                         <p class="text-indigo-200 text-sm">Kelola semua peminjaman, alat, dan user dalam satu dashboard</p>
                     </div>
 

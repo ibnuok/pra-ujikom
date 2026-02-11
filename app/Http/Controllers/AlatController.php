@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Alat;
+use App\Models\Kategori;
 use Illuminate\Http\Request;
 
 class AlatController extends Controller
@@ -15,7 +16,8 @@ class AlatController extends Controller
 
     public function create()
     {
-        return view('admin.alat.create');
+        $kategori = Kategori::all();
+        return view('admin.alat.create', compact('kategori'));
     }
 
     public function store(Request $request)
@@ -28,7 +30,8 @@ class AlatController extends Controller
 
     public function edit(Alat $alat)
     {
-        return view('admin.alat.edit', compact('alat'));
+        $kategori = Kategori::all();
+        return view('admin.alat.edit', compact('alat', 'kategori'));
     }
 
     public function update(Request $request, Alat $alat)

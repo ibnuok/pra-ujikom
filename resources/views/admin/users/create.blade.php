@@ -5,13 +5,13 @@
 @section('content')
 <div class="max-w-2xl">
     <!-- Header -->
-    <div class="bg-blue-950/30 backdrop-blur-sm border border-indigo-500/30 rounded-xl p-6 shadow-lg mb-6">
-        <h1 class="text-3xl font-bold text-indigo-300">Tambah Petugas Baru</h1>
-        <p class="text-indigo-200 mt-1">Buat akun untuk petugas yang akan mengelola peminjaman</p>
+    <div class="bg-white shadow-lg border border-gray-200 rounded-xl p-6 mb-6">
+        <h1 class="text-3xl font-bold text-indigo-700">Tambah Petugas Baru</h1>
+        <p class="text-indigo-600 mt-1">Buat akun untuk petugas yang akan mengelola peminjaman</p>
     </div>
 
     <!-- Form -->
-    <form action="{{ route('admin.users.store') }}" method="POST" class="bg-blue-950/30 backdrop-blur-sm border border-indigo-500/30 rounded-xl p-6 shadow-lg space-y-6">
+    <form action="{{ route('admin.users.store') }}" method="POST" class="bg-white shadow-lg border border-gray-200 rounded-xl p-6 space-y-6">
         @csrf
 
         <!-- Name -->
